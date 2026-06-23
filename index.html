@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoalMaster - Танзими вақт ва ҳадафҳо</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <div>
+                <h1 data-i18n="app_title" style="font-size: 28px; margin: 0;">🎯 GoalMaster</h1>
+                <p data-i18n="app_subtitle" style="font-size: 14px; margin: 5px 0 0 0;">Танзими вақт, нақша ва ҳадафҳо</p>
+            </div>
+            <!-- Кнопкаи хурди забон -->
+            <div class="language-selector">
+                <div class="lang-dropdown">
+                    <button class="lang-dropdown-btn" id="langDropdownBtn">
+                        <span id="current-lang-flag">🌐</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="lang-dropdown-content" id="langDropdownContent">
+                        <button class="lang-option active" data-lang="tg">
+                            <span class="lang-flag">🇹🇯</span>
+                            <span class="lang-name">Тоҷикӣ</span>
+                        </button>
+                        <button class="lang-option" data-lang="ru">
+                            <span class="lang-flag">🇷🇺</span>
+                            <span class="lang-name">Русский</span>
+                        </button>
+                        <button class="lang-option" data-lang="en">
+                            <span class="lang-flag">🇬🇧</span>
+                            <span class="lang-name">English</span>
+                        </button>
+                        <button class="lang-option" data-lang="fa">
+                            <span class="lang-flag">🇮🇷</span>
+                            <span class="lang-name">فارسی</span>
+                        </button>
+                        <button class="lang-option" data-lang="ar">
+                            <span class="lang-flag">🇸🇦</span>
+                            <span class="lang-name">العربية</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Табҳо -->
+    <nav>
+        <button class="tab-btn active" data-tab="goals" data-i18n="tab_goals">📋 Ҳадафҳо</button>
+        <button class="tab-btn" data-tab="plan" data-i18n="tab_plan">📝 Нақша</button>
+        <button class="tab-btn" data-tab="timer" data-i18n="tab_timer">⏱ Таймер</button>
+        <button class="tab-btn" data-tab="stats" data-i18n="tab_stats">📊 Статистика</button>
+    </nav>
+
+    <main>
+        <!-- ===== ҲАДАФҲО ===== -->
+        <section id="goals" class="tab-content active">
+            <h2 data-i18n="goals_title">📋 Ҳадафҳои шумо</h2>
+            
+            <form id="goal-form">
+                <div class="form-group">
+                    <input type="text" id="goal-title" data-i18n="goal_placeholder" placeholder="Номи ҳадаф" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="goal-desc" data-i18n="goal_desc_placeholder" placeholder="Тавсифи ҳадаф (ихтиёрӣ)"></textarea>
+                </div>
+                <div class="form-group">
+                    <select id="goal-deadline">
+                        <option value="short" data-i18n="goal_deadline_short">⚡ Кӯтоҳмуҳлат</option>
+                        <option value="medium" selected data-i18n="goal_deadline_medium">📅 Миёнамуҳлат</option>
+                        <option value="long" data-i18n="goal_deadline_long">🐢 Дарозмуҳлат</option>
+                    </select>
+                </div>
+                <button type="submit" id="add-goal-btn" data-i18n="goal_add_btn">➕ Иловаи ҳадаф</button>
+            </form>
+
+            <div id="goals-list">
+                <p class="empty-msg" data-i18n="goal_empty">📭 Ҳоло ҳадафе нест</p>
+            </div>
+        </section>
+
+        <!-- ===== НАҚША ===== -->
+        <section id="plan" class="tab-content">
+            <h2 data-i18n="plan_title">📝 Нақшаи рӯзона</h2>
+            
+            <form id="task-form">
+                <div class="form-group">
+                    <input type="text" id="task-title" data-i18n="task_placeholder" placeholder="Номи вазифа" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-i18n="task_start">🕐 Оғоз:</label>
+                        <input type="time" id="task-start" value="09:00">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="task_end">🕐 Анҷом:</label>
+                        <input type="time" id="task-end" value="10:00">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="task-important"> <span data-i18n="task_important">⭐ Муҳим</span>
+                    </label>
+                </div>
+                <button type="submit" id="add-task-btn" data-i18n="task_add_btn">➕ Иловаи вазифа</button>
+            </form>
+
+            <div class="filter-section">
+                <button class="filter-btn active" data-filter="all" data-i18n="filter_all">📋 Ҳама</button>
+                <button class="filter-btn" data-filter="active" data-i18n="filter_active">⏳ Иҷро нашуд</button>
+                <button class="filter-btn" data-filter="completed" data-i18n="filter_completed">✅ Иҷро шуд</button>
+                <button class="filter-btn" data-filter="important" data-i18n="filter_important">⭐ Муҳим</button>
+            </div>
+
+            <div id="tasks-list">
+                <p class="empty-msg" data-i18n="task_empty">📭 Ҳоло вазифае нест</p>
+            </div>
+        </section>
+
+        <!-- ===== ТАЙМЕР ===== -->
+        <section id="timer" class="tab-content">
+            <h2 data-i18n="timer_title">⏱ Помодоро Таймер</h2>
+            
+            <div class="timer-container">
+                <div class="timer-display">
+                    <div class="timer-circle">
+                        <span class="timer-time" id="timer-time">25:00</span>
+                        <span class="timer-mode" id="timer-mode" data-i18n="timer_work">⏳ Кор</span>
+                    </div>
+                </div>
+
+                <div class="timer-controls">
+                    <button id="timer-start" class="timer-btn btn-start" data-i18n="timer_start">▶ Сар кардан</button>
+                    <button id="timer-pause" class="timer-btn btn-pause" disabled data-i18n="timer_pause">⏸ Танаффус</button>
+                    <button id="timer-reset" class="timer-btn btn-reset" data-i18n="timer_reset">⏹ Бозсозӣ</button>
+                </div>
+
+                <div class="timer-sessions">
+                    <p><span data-i18n="timer_sessions">📊 Давраҳо:</span> <span id="session-count">0</span></p>
+                    <p><span data-i18n="timer_total">⏳ Вақти умумӣ:</span> <span id="total-time">0:00</span></p>
+                </div>
+
+                <div class="timer-settings">
+                    <div class="setting-group">
+                        <label data-i18n="timer_work_label">⏳ Вақти кор (дақ.):</label>
+                        <input type="number" id="work-time" value="25" min="1" max="60">
+                    </div>
+                    <div class="setting-group">
+                        <label data-i18n="timer_break_label">☕ Вақти истироҳат (дақ.):</label>
+                        <input type="number" id="break-time" value="5" min="1" max="30">
+                    </div>
+                    <button id="apply-settings" class="btn-settings" data-i18n="timer_apply">✅ Танзим кунед</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== СТАТИСТИКА ===== -->
+        <section id="stats" class="tab-content">
+            <h2 data-i18n="stats_title">📊 Статистика</h2>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-goals">0</div>
+                    <div class="stat-label" data-i18n="stats_total">📋 Ҳамаи ҳадафҳо</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completed-goals">0</div>
+                    <div class="stat-label" data-i18n="stats_completed">✅ Иҷрошуда</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pending-goals">0</div>
+                    <div class="stat-label" data-i18n="stats_pending">⏳ Иҷронашуд</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="progress-percent">0%</div>
+                    <div class="stat-label" data-i18n="stats_percent">📈 Фоизи иҷро</div>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3 data-i18n="stats_chart_doughnut">📊 Фоизи иҷро</h3>
+                    <canvas id="doughnut-chart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3 data-i18n="stats_chart_bar">📊 Муҳлатҳо</h3>
+                    <canvas id="bar-chart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
